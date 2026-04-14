@@ -8,9 +8,9 @@ This is a **full-stack award seat alert application** that allows you to:
 3. **Track matches** with a dashboard showing all found awards
 
 The app consists of:
-- **Backend**: Node.js/Express API with TypeScript
+- **Backend**: Python/FastAPI service with SQLAlchemy
 - **Frontend**: React app with Tailwind CSS
-- **Database**: PostgreSQL
+- **Database**: SQLite by default (PostgreSQL optional)
 - **Notifications**: Twilio SMS
 
 ---
@@ -84,14 +84,9 @@ This installs dependencies for both backend and frontend.
 
 ## 🗄️ Step 3: Setup Database
 
-In the backend directory:
+The Python backend creates the database automatically when it starts.
 
-```bash
-cd backend
-npm run db:push
-```
-
-This creates all tables defined in `prisma/schema.prisma`.
+If you want to use PostgreSQL instead of SQLite, set `DATABASE_URL` in `backend/.env`.
 
 ---
 
@@ -114,7 +109,8 @@ This starts:
 **Backend:**
 ```bash
 cd backend
-npm run dev
+pip install -r requirements.txt
+uvicorn app.main:app --reload --host 0.0.0.0 --port 3001
 ```
 
 **Frontend (in a new terminal):**
@@ -339,9 +335,9 @@ After you have the MVP running:
 
 ## 💡 Tips
 
-- **Local development**: Use `npm run dev` in each directory for hot reloading
-- **Database migrations**: Run `npm run db:migrate` in backend after changing schema
-- **Reset database**: Delete database and run `npm run db:push` again
+- **Local development**: Start the Python backend from `backend/` with `uvicorn app.main:app --reload --host 0.0.0.0 --port 3001` and the frontend with `npm run dev`
+- **Database setup**: The backend creates tables automatically on startup; use `DATABASE_URL` to switch database providers
+- **Reset database**: Delete the local SQLite file and restart the backend
 - **Test API**: Use Postman, Thunder Client, or `curl`
 
 ---

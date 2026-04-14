@@ -13,7 +13,7 @@
 
 ### Components Built
 
-#### Backend (Node.js/Express)
+#### Backend (FastAPI)
 | Component | Type | Count | Details |
 |-----------|------|-------|---------|
 | Adapters | Class | 2 | United, Alaska (with base class) |
@@ -112,7 +112,7 @@ award-seat-alerts/                          [Root]
 │   ├── .env.example                     Environment template
 │   └── setup.sh                         Setup script
 │
-├── 📦 Backend (Node.js/Express)
+├── 📦 Backend (FastAPI)
 │   ├── src/
 │   │   ├── adapters/                   Airline API implementations
 │   │   │   ├── AirlineAdapter.ts       Base class
@@ -333,9 +333,9 @@ Total: 11 endpoints
 
 ### Backend
 - Node.js 18+
-- Express.js 4.x
-- TypeScript 5.x
-- Prisma (ORM)
+- FastAPI
+- Python 3.x
+- SQLAlchemy
 - PostgreSQL 12+
 - JWT + bcrypt (auth)
 - Twilio SDK (SMS)
@@ -344,7 +344,7 @@ Total: 11 endpoints
 ### Frontend
 - React 18
 - React Router 6
-- TypeScript 5
+- Python 3
 - Zustand (state)
 - Tailwind CSS 3
 - Vite 5

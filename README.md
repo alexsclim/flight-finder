@@ -1,36 +1,15 @@
 # Flight Finder
 
-Global award seat search and notification app built with React, Node.js, Express, and PostgreSQL.
+Global award seat search and notification app built with React, FastAPI, and PostgreSQL/SQLite.
 
 ## 📁 Project Structure
 
 ```
 flight-finder/
-├── backend/                    # Node.js/Express API
-│   ├── src/
-│   │   ├── adapters/          # Airline-specific search adapters
-│   │   │   ├── AirlineAdapter.ts    # Base class
-│   │   │   ├── UnitedAdapter.ts     # United Airlines implementation
-│   │   │   ├── AlaskaAdapter.ts     # Alaska Airlines implementation
-│   │   │   └── index.ts             # Registry & exports
-│   │   ├── services/          # Business logic
-│   │   │   ├── SearchService.ts     # Award search logic
-│   │   │   ├── AlertService.ts      # Alert CRUD & matching
-│   │   │   ├── NotificationService.ts # SMS via Twilio
-│   │   │   └── index.ts
-│   │   ├── routes/            # API endpoints
-│   │   │   ├── search.ts      # /api/search
-│   │   │   ├── alerts.ts      # /api/alerts
-│   │   │   ├── auth.ts        # /api/auth
-│   │   │   └── index.ts
-│   │   ├── jobs/              # Background jobs
-│   │   │   └── alertMatcher.ts      # Periodic alert checking
-│   │   ├── middleware/        # Auth middleware
-│   │   └── index.ts           # Express app entry
-│   ├── prisma/
-│   │   └── schema.prisma      # Database schema
-│   ├── package.json
-│   └── tsconfig.json
+├── backend/                    # Backend workspace
+│   ├── app/                    # FastAPI application files
+│   ├── requirements.txt
+│   └── README.md
 │
 ├── frontend/                   # React app
 │   ├── src/

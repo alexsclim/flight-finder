@@ -8,14 +8,14 @@ I've built a **full-stack global award seat alert application** from scratch. He
 
 ## ✅ What's Implemented
 
-### Backend (Node.js/Express + TypeScript)
-- ✅ **Airline Adapters** - Extensible system for airline search APIs (United & Alaska implemented as examples)
+### Backend (Python/FastAPI)
+- ✅ **Airline Adapters** - Extensible search backend for airline availability queries
 - ✅ **Search Service** - Parallel multi-airline searches with result normalization
 - ✅ **Alert Service** - Full CRUD for user alerts with match tracking
-- ✅ **Notification Service** - SMS alerts via Twilio
-- ✅ **Background Job** - Hourly alert checker that finds matches and sends SMS
-- ✅ **Authentication** - JWT-based auth with bcrypt passwords
-- ✅ **Database Schema** - PostgreSQL with Prisma ORM (Users, Alerts, Searches, Matches)
+- ✅ **Notification Service** - SMS alerts via Twilio-compatible placeholder
+- ✅ **Background Job** - Hourly alert checker that finds matches and queues notifications
+- ✅ **Authentication** - JWT-based auth with bcrypt-compatible password hashing
+- ✅ **Database Schema** - SQLite/PostgreSQL with SQLAlchemy models (Users, Alerts, Searches, Matches)
 - ✅ **API Routes** - RESTful endpoints for search, alerts, auth
 
 ### Frontend (React + Tailwind CSS)
@@ -233,11 +233,11 @@ export const ADAPTER_REGISTRY = {
 
 | Component | Technology |
 |-----------|------------|
-| **Backend Runtime** | Node.js 18+ |
-| **Backend Framework** | Express.js |
-| **Language** | TypeScript |
-| **Database** | PostgreSQL |
-| **ORM** | Prisma |
+| **Backend Runtime** | Python 3.x |
+| **Backend Framework** | FastAPI |
+| **Language** | Python |
+| **Database** | PostgreSQL / SQLite |
+| **ORM** | SQLAlchemy |
 | **Auth** | JWT + bcrypt |
 | **Frontend** | React 18 |
 | **Frontend State** | Zustand |
