@@ -32,8 +32,8 @@ I've built a **full-stack global award seat alert application** from scratch. He
 - ✅ `.env.example` - Environment variables template
 - ✅ `GETTING_STARTED.md` - Step-by-step setup guide
 - ✅ `README.md` - Project overview and architecture
-- ✅ Prisma schema - Complete database design
-- ✅ TypeScript configs - Strict type checking
+- ✅ SQLAlchemy models - Complete database design
+- ✅ Python dependencies - Requirements file with all packages
 - ✅ Tailwind setup - Styling pipeline ready
 
 ---
@@ -48,39 +48,24 @@ award-seat-alerts/
 ├── 📄 .env.example              ← Environment template
 ├── 📄 setup.sh                  ← Automated setup script
 │
-├── backend/                     ← Node.js/Express API
-│   ├── src/
-│   │   ├── adapters/            ← Airline search implementations
-│   │   │   ├── AirlineAdapter.ts      (base class)
-│   │   │   ├── UnitedAdapter.ts       (example: United Airlines)
-│   │   │   ├── AlaskaAdapter.ts       (example: Alaska Airlines)
-│   │   │   └── index.ts                (registry & exports)
+├── backend/                     ← Python/FastAPI API
+│   ├── app/
+│   │   ├── routers/             ← API route modules
+│   │   │   ├── auth.py          (/api/auth)
+│   │   │   ├── search.py        (/api/search)
+│   │   │   ├── alerts.py        (/api/alerts)
+│   │   │   └── __init__.py
 │   │   │
-│   │   ├── services/            ← Business logic
-│   │   │   ├── SearchService.ts       (award searches)
-│   │   │   ├── AlertService.ts        (alert CRUD & matching)
-│   │   │   ├── NotificationService.ts (SMS via Twilio)
-│   │   │   └── index.ts
-│   │   │
-│   │   ├── routes/              ← API endpoints
-│   │   │   ├── search.ts        (/api/search)
-│   │   │   ├── alerts.ts        (/api/alerts)
-│   │   │   ├── auth.ts          (/api/auth)
-│   │   │   └── (no index yet)
-│   │   │
-│   │   ├── jobs/                ← Background jobs
-│   │   │   └── alertMatcher.ts  (hourly alert checking)
-│   │   │
-│   │   ├── middleware/          ← Middleware
-│   │   │   └── auth.ts          (JWT validation)
-│   │   │
-│   │   └── index.ts             ← Express app entry
+│   │   ├── auth.py              ← JWT authentication
+│   │   ├── database.py          ← SQLAlchemy setup
+│   │   ├── models.py            ← ORM models
+│   │   ├── schemas.py           ← API schemas
+│   │   ├── services.py          ← Business logic
+│   │   ├── jobs.py              ← Background jobs
+│   │   └── main.py              ← FastAPI app entry
 │   │
-│   ├── prisma/
-│   │   └── schema.prisma        ← Database design
-│   │
-│   ├── package.json
-│   ├── tsconfig.json
+│   ├── requirements.txt         ← Python dependencies
+│   ├── package.json             ← npm run shortcuts
 │   └── README.md
 │
 ├── frontend/                    ← React app

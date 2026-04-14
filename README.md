@@ -41,19 +41,17 @@ flight-finder/
 ## 🚀 Quick Start
 
 ### Prerequisites
-- Node.js 18+
-- PostgreSQL
-- Twilio account (for SMS notifications)
+- Python 3.8+
+- Node.js 18+ (for frontend)
+- Optional: PostgreSQL (SQLite used by default)
+- Optional: Twilio account (for SMS notifications)
 
 ### Backend Setup
 
 ```bash
 cd backend
-npm install
-cp ../.env.example ../.env
-# Edit .env with your credentials
-npm run db:push              # Create database tables
-npm run dev                  # Start API on http://localhost:3001
+pip install -r requirements.txt
+uvicorn app.main:app --reload --host 0.0.0.0 --port 3001
 ```
 
 ### Frontend Setup
@@ -62,14 +60,6 @@ npm run dev                  # Start API on http://localhost:3001
 cd frontend
 npm install
 npm run dev                  # Start app on http://localhost:3000
-```
-
-### Full Stack
-
-From root directory:
-```bash
-npm install
-npm run dev                   # Runs both backend and frontend
 ```
 
 ## 🔌 API Endpoints
@@ -139,13 +129,13 @@ The `alertMatcher` background job:
 ## 🛠️ Tech Stack
 
 **Backend:**
-- Node.js + Express.js
-- TypeScript
-- Prisma ORM
-- PostgreSQL
+- Python 3.8+
+- FastAPI
+- SQLAlchemy ORM
+- SQLite (default) or PostgreSQL
 - JWT + bcrypt for auth
-- Twilio for SMS
-- Axios for HTTP requests
+- Twilio for SMS (optional)
+- Pydantic for validation
 
 **Frontend:**
 - React 18

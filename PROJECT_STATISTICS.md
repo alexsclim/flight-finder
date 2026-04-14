@@ -3,25 +3,25 @@
 ## 🎯 Project Scope Completed
 
 ### Code Metrics
-- **TypeScript/React Files**: 26
-- **Configuration Files**: 10
+- **Python/React Files**: 26
+- **Configuration Files**: 8
 - **Documentation Files**: 7
-- **Total Project Files**: 50
-- **Lines of Code**: ~3,500+
+- **Total Project Files**: 45
+- **Lines of Code**: ~2,500+
 - **API Endpoints**: 11
 - **Database Tables**: 6
 
 ### Components Built
 
-#### Backend (FastAPI)
+#### Backend (Python/FastAPI)
 | Component | Type | Count | Details |
-|-----------|------|-------|---------|
-| Adapters | Class | 2 | United, Alaska (with base class) |
-| Services | Class | 3 | SearchService, AlertService, NotificationService |
-| Routes | Module | 3 | search, alerts, auth |
-| Middleware | Function | 1 | JWT authentication |
+|-----------|------|-------|----------|
+| Routers | Module | 3 | auth, search, alerts |
+| Services | Class | 1 | Business logic |
+| Models | SQLAlchemy | 6 | User, Alert, AlertMatch, SearchSession, AvailabilityResult, AirlineAPIKey |
+| Schemas | Pydantic | 15+ | Request/response validation |
+| Authentication | Module | 1 | JWT + bcrypt |
 | Jobs | Module | 1 | Background alert matcher |
-| Models | Prisma | 6 | User, Alert, AlertMatch, SearchSession, AvailabilityResult, AirlineAPIKey |
 
 #### Frontend (React)
 | Component | Type | Count | Details |
@@ -30,7 +30,7 @@
 | API Client | Module | 1 | Axios-based with auth interceptor |
 | State Management | Store | 1 | Zustand auth store |
 | Styling | CSS | 2 | Tailwind + custom components |
-| Config | Files | 6 | Vite, TypeScript, Tailwind, PostCSS |
+| Config | Files | 3 | Vite, TypeScript, Tailwind (frontend only) |
 
 #### Documentation
 | Document | Purpose | Size |
@@ -60,7 +60,7 @@
                     (HTTP + JWT Auth)
                               ↕
 ┌─────────────────────────────────────────────────────────────┐
-│                   Backend (Express API)                     │
+│                   Backend (FastAPI)                     │
 │  ┌──────────────┬──────────────┬────────────────────────┐   │
 │  │ Auth Routes  │ Search Routes│ Alert Routes           │   │
 │  │ • Register   │ • POST search│ • Create/Read/Update   │   │
@@ -69,18 +69,14 @@
 │  └──────────────┴──────────────┴────────────────────────┘   │
 │  ┌────────────────────────────────────────────────────────┐  │
 │  │            Service Layer                              │  │
-│  │  SearchService • AlertService • NotificationService   │  │
-│  └────────────────────────────────────────────────────────┘  │
-│  ┌────────────────────────────────────────────────────────┐  │
-│  │         Airline Adapters (Extensible)                 │  │
-│  │  United • Alaska • [Future: AmEx, Chase, Citi]        │  │
+│  │  SearchService • AlertService                         │  │
 │  └────────────────────────────────────────────────────────┘  │
 └─────────────────────────────────────────────────────────────┘
                               ↕
-                       (Prisma ORM)
+                       (SQLAlchemy ORM)
                               ↕
 ┌─────────────────────────────────────────────────────────────┐
-│                 PostgreSQL Database                         │
+│                 SQLite / PostgreSQL                         │
 │  ┌─────────┬────────┬──────────┬─────────┬─────────────┐    │
 │  │ Users   │ Alerts │ Matches  │ Searches│ Results     │    │
 │  │         │        │          │         │             │    │
@@ -112,38 +108,25 @@ award-seat-alerts/                          [Root]
 │   ├── .env.example                     Environment template
 │   └── setup.sh                         Setup script
 │
-├── 📦 Backend (FastAPI)
-│   ├── src/
-│   │   ├── adapters/                   Airline API implementations
-│   │   │   ├── AirlineAdapter.ts       Base class
-│   │   │   ├── UnitedAdapter.ts        United implementation
-│   │   │   ├── AlaskaAdapter.ts        Alaska implementation
-│   │   │   └── index.ts                Registry & exports
+├── 📦 Backend (Python/FastAPI)
+│   ├── app/
+│   │   ├── routers/                    API route modules
+│   │   │   ├── auth.py                 (/api/auth)
+│   │   │   ├── search.py               (/api/search)
+│   │   │   ├── alerts.py               (/api/alerts)
+│   │   │   └── __init__.py
 │   │   │
-│   │   ├── services/                   Business logic layer
-│   │   │   ├── SearchService.ts        Award search logic
-│   │   │   ├── AlertService.ts         Alert CRUD & matching
-│   │   │   ├── NotificationService.ts  SMS notifications
-│   │   │   └── index.ts
-│   │   │
-│   │   ├── routes/                     API endpoints
-│   │   │   ├── search.ts               /api/search
-│   │   │   ├── alerts.ts               /api/alerts
-│   │   │   └── auth.ts                 /api/auth
-│   │   │
-│   │   ├── jobs/
-│   │   │   └── alertMatcher.ts         Background alert checker
-│   │   │
-│   │   ├── middleware/
-│   │   │   └── auth.ts                 JWT validation
-│   │   │
-│   │   └── index.ts                    Express app entry
+│   │   ├── auth.py                     JWT authentication helpers
+│   │   ├── database.py                 SQLAlchemy setup & session
+│   │   ├── models.py                   ORM database models
+│   │   ├── schemas.py                  API request/response schemas
+│   │   ├── services.py                 Business logic layer
+│   │   ├── jobs.py                     Background alert matcher
+│   │   ├── main.py                     FastAPI app entry point
+│   │   └── __init__.py
 │   │
-│   ├── prisma/
-│   │   └── schema.prisma               Database schema
-│   │
-│   ├── package.json
-│   ├── tsconfig.json
+│   ├── requirements.txt                Python dependencies
+│   ├── package.json                    npm run shortcuts
 │   ├── README.md
 │   └── .gitignore
 │
@@ -351,9 +334,10 @@ Total: 11 endpoints
 - Axios
 
 ### Infrastructure
-- PostgreSQL (database)
-- Twilio (SMS)
-- Express (web server)
+- SQLite / PostgreSQL (database)
+- Twilio (SMS - optional)
+- FastAPI (web server)
+- SQLAlchemy (ORM)
 
 ---
 

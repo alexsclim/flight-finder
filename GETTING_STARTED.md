@@ -19,11 +19,12 @@ The app consists of:
 
 Before starting, you'll need:
 
-1. **Node.js** (v18 or higher) — [Download](https://nodejs.org/)
-2. **PostgreSQL** (local or remote) — [Download](https://www.postgresql.org/download/)
+1. **Python** (3.8 or higher) — [Download](https://www.python.org/downloads/)
+2. **Node.js** (v18 or higher) — [Download](https://nodejs.org/) (for frontend only)
 3. **Text Editor/IDE** — VS Code recommended
-4. **Twilio Account** (free trial works) — [Sign up](https://www.twilio.com/try-twilio)
+4. **Twilio Account** (optional, free trial works) — [Sign up](https://www.twilio.com/try-twilio)
    - You'll need: Account SID, Auth Token, and a Twilio phone number
+5. **PostgreSQL** (optional, SQLite is the default) — [Download](https://www.postgresql.org/download/)
 
 ---
 
@@ -40,10 +41,11 @@ cp .env.example .env
 ### 1.2 Edit `.env` with your values
 
 ```bash
-# Database (create a PostgreSQL database first)
-DATABASE_URL=postgresql://username:password@localhost:5432/award_seats
+# Database (optional - backend uses SQLite by default)
+# For PostgreSQL: DATABASE_URL=postgresql://user:password@localhost:5432/award_seats
+# DATABASE_URL=sqlite:///./flight_finder.db  # Default SQLite
 
-# Twilio (get from https://www.twilio.com/console)
+# Twilio (optional for SMS notifications)
 TWILIO_ACCOUNT_SID=ACxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 TWILIO_AUTH_TOKEN=your_auth_token_here
 TWILIO_PHONE_NUMBER=+1234567890
@@ -51,34 +53,27 @@ TWILIO_PHONE_NUMBER=+1234567890
 # JWT Secret (create any random string)
 JWT_SECRET=your-super-secret-key-change-this
 
-# Server
-PORT=3001
-NODE_ENV=development
-
 # Frontend
 VITE_API_URL=http://localhost:3001/api
-```
-
-### 1.3 Create PostgreSQL Database
-
-```bash
-createdb award_seats
-# Or using psql:
-# psql -U postgres
-# CREATE DATABASE award_seats;
 ```
 
 ---
 
 ## 📦 Step 2: Install Dependencies
 
-From the project root:
+**Backend (from `backend/` directory):**
 
 ```bash
-npm install
+cd backend
+pip install -r requirements.txt
 ```
 
-This installs dependencies for both backend and frontend.
+**Frontend (from `frontend/` directory):**
+
+```bash
+cd frontend
+npm install
+```
 
 ---
 
@@ -92,11 +87,17 @@ If you want to use PostgreSQL instead of SQLite, set `DATABASE_URL` in `backend/
 
 ## 🚀 Step 4: Start Development
 
-### Option A: Start both backend and frontend together
+### Option A: Start backend and frontend separately
 
-From the project root:
-
+**Backend (Terminal 1):**
 ```bash
+cd backend
+uvicorn app.main:app --reload --host 0.0.0.0 --port 3001
+```
+
+**Frontend (Terminal 2):**
+```bash
+cd frontend
 npm run dev
 ```
 
@@ -104,19 +105,18 @@ This starts:
 - Backend API on `http://localhost:3001`
 - Frontend on `http://localhost:3000`
 
-### Option B: Start individually
+### Option B: Use npm shortcuts from root
+
+From the root directory, you can also run individual services:
 
 **Backend:**
 ```bash
-cd backend
-pip install -r requirements.txt
-uvicorn app.main:app --reload --host 0.0.0.0 --port 3001
+cd backend && npm run dev
 ```
 
-**Frontend (in a new terminal):**
+**Frontend:**
 ```bash
-cd frontend
-npm run dev
+cd frontend && npm run dev
 ```
 
 ---
@@ -220,18 +220,22 @@ DELETE /api/alerts/:id       Delete alert
 ## 🛠️ Project Structure Quick Reference
 
 ```
-award-seat-alerts/
-├── backend/                  Express API
-│   ├── src/adapters/        Airline search implementations
-│   ├── src/services/        Business logic
-│   ├── src/routes/          API endpoints
-│   ├── src/jobs/            Background jobs
-│   └── prisma/              Database schema
+flight-finder/
+├── backend/                  FastAPI backend
+│   ├── app/routers/         API route modules
+│   ├── app/auth.py          JWT authentication
+│   ├── app/database.py      SQLAlchemy setup
+│   ├── app/models.py        Database models
+│   ├── app/schemas.py       Request/response schemas
+│   ├── app/services.py      Business logic
+│   ├── app/jobs.py          Background alert matcher
+│   ├── requirements.txt     Python dependencies
+│   └── README.md
 ├── frontend/                React app
 │   ├── src/pages/           React components
 │   ├── src/api.ts           API client
 │   └── src/store.ts         Auth state
-└── database/                SQL schema reference
+└── database/                Database schema reference
 ```
 
 ---
