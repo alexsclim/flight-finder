@@ -8,7 +8,7 @@ from ..models import User
 router = APIRouter()
 
 
-@router.post('/register', response_model=TokenResponse, status_code=status.HTTP_201_CREATED)
+@router.post('/auth/register', response_model=TokenResponse, status_code=status.HTTP_201_CREATED)
 def register(user_data: UserCreate, db: Session = Depends(get_db)):
     existing = db.query(User).filter(User.email == user_data.email).first()
     if existing:
@@ -17,7 +17,7 @@ def register(user_data: UserCreate, db: Session = Depends(get_db)):
     user = User(
         email=user_data.email,
         password_hash=get_password_hash(user_data.password),
-        phone_number=user_data.phone_number,
+        phone_number=user_data.phoneNumber,
     )
     db.add(user)
     db.commit()
@@ -27,7 +27,7 @@ def register(user_data: UserCreate, db: Session = Depends(get_db)):
     return TokenResponse(token=token, user=UserResponse.from_orm(user))
 
 
-@router.post('/login', response_model=TokenResponse)
+@router.post('/auth/login', response_model=TokenResponse)
 def login(credentials: UserLogin, db: Session = Depends(get_db)):
     user = db.query(User).filter(User.email == credentials.email).first()
     if not user or not verify_password(credentials.password, user.password_hash):

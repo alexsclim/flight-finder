@@ -46,7 +46,7 @@ def alert_to_response(alert):
     }
 
 
-@router.post('/', response_model=AlertResponse, status_code=status.HTTP_201_CREATED)
+@router.post('/alerts', response_model=AlertResponse, status_code=status.HTTP_201_CREATED)
 def create_new_alert(
     payload: AlertCreateRequest,
     db: Session = Depends(get_db),
@@ -59,13 +59,13 @@ def create_new_alert(
     return alert_to_response(alert)
 
 
-@router.get('/', response_model=list[AlertResponse])
+@router.get('/alerts', response_model=list[AlertResponse])
 def list_alerts(db: Session = Depends(get_db), current_user=Depends(get_current_user)):
     alerts = get_user_alerts(db, current_user.id)
     return [alert_to_response(alert) for alert in alerts]
 
 
-@router.get('/{alert_id}', response_model=AlertResponse)
+@router.get('/alerts/{alert_id}', response_model=AlertResponse)
 def get_alert(alert_id: str, db: Session = Depends(get_db), current_user=Depends(get_current_user)):
     alert = get_alert_with_matches(db, alert_id)
     if alert is None or alert.user_id != current_user.id:
@@ -73,7 +73,7 @@ def get_alert(alert_id: str, db: Session = Depends(get_db), current_user=Depends
     return alert_to_response(alert)
 
 
-@router.patch('/{alert_id}', response_model=AlertResponse)
+@router.patch('/alerts/{alert_id}', response_model=AlertResponse)
 def patch_alert(
     alert_id: str,
     payload: AlertUpdateRequest,
@@ -90,7 +90,7 @@ def patch_alert(
     return alert_to_response(updated)
 
 
-@router.delete('/{alert_id}')
+@router.delete('/alerts/{alert_id}')
 def remove_alert(alert_id: str, db: Session = Depends(get_db), current_user=Depends(get_current_user)):
     alert = get_alert_with_matches(db, alert_id)
     if alert is None or alert.user_id != current_user.id:

@@ -21,8 +21,8 @@ class UserResponse(BaseModel):
     phoneNumber: Optional[str] = Field(default=None, alias='phone_number')
 
     class Config:
-        orm_mode = True
-        allow_population_by_field_name = True
+        from_attributes = True
+        validate_by_name = True
 
 
 class TokenResponse(BaseModel):
@@ -42,7 +42,8 @@ class AvailabilityResultResponse(BaseModel):
     externalId: Optional[str] = None
 
     class Config:
-        orm_mode = True
+        from_attributes = True
+        validate_by_name = True
 
 
 class SearchRequest(BaseModel):
@@ -68,7 +69,8 @@ class SearchSessionSummary(BaseModel):
     expiresAt: datetime
 
     class Config:
-        orm_mode = True
+        from_attributes = True
+        validate_by_name = True
 
 
 class SearchSessionResponse(BaseModel):
@@ -88,7 +90,8 @@ class SearchHistoryItem(BaseModel):
     resultsCount: int
 
     class Config:
-        orm_mode = True
+        from_attributes = True
+        validate_by_name = True
 
 
 class AlertCreateRequest(BaseModel):
@@ -122,7 +125,8 @@ class AlertMatchResponse(BaseModel):
     createdAt: datetime
 
     class Config:
-        orm_mode = True
+        from_attributes = True
+        validate_by_name = True
 
 
 class AlertResponse(BaseModel):
@@ -142,4 +146,5 @@ class AlertResponse(BaseModel):
     matches: Optional[List[AlertMatchResponse]] = None
 
     class Config:
-        orm_mode = True
+        from_attributes = True
+        validate_by_name = True

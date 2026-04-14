@@ -4,4 +4,10 @@ SQLAlchemy
 python-dotenv
 python-jose[cryptography]
 passlib[bcrypt]
+bcrypt==4.1.2
 pydantic
+email-validator
+requests
+beautifulsoup4
+selenium
+webdriver-manager

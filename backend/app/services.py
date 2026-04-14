@@ -3,6 +3,7 @@ from typing import List, Optional
 import uuid
 from sqlalchemy.orm import Session
 from . import models, schemas
+from .scrapers.scraper_manager import ScraperManager
 
 
 def random_result_id() -> str:
@@ -28,34 +29,39 @@ def create_search_session(db: Session, user_id: Optional[str], payload: schemas.
     db.commit()
     db.refresh(session)
 
+    # Use scraper manager to get real flight data
+    scraper_manager = ScraperManager()
+    scraped_results = scraper_manager.search_all_airlines(
+        payload.departureAirport,
+        payload.arrivalAirport,
+        payload.startDate,
+        payload.endDate,
+        payload.cabinClasses
+    )
+
     results = []
-    current_date = payload.startDate
-    max_days = min((payload.endDate - payload.startDate).days + 1, 3)
+    for scraped_result in scraped_results:
+        # Filter by requested airlines if specified
+        if payload.airlines and scraped_result.airline not in payload.airlines:
+            continue
 
-    for day_offset in range(max_days):
-        if current_date > payload.endDate:
-            break
+        # Filter by max miles cost
+        if payload.maxMilesCost and scraped_result.miles_cost > payload.maxMilesCost:
+            continue
 
-        for airline in payload.airlines:
-            for cabin in payload.cabinClasses:
-                miles_cost = 10000 + day_offset * 500 + len(cabin) * 400 + (sum(ord(c) for c in airline) % 1000)
-                if payload.maxMilesCost and miles_cost > payload.maxMilesCost:
-                    continue
-                result = models.AvailabilityResult(
-                    search_session_id=session.id,
-                    airline=airline,
-                    departure_date=current_date,
-                    departure_time='08:00',
-                    arrival_time='12:00',
-                    cabin_class=cabin,
-                    miles_cost=miles_cost,
-                    available_seats=1,
-                    external_id=random_result_id(),
-                )
-                db.add(result)
-                results.append(result)
-
-        current_date += timedelta(days=1)
+        result = models.AvailabilityResult(
+            search_session_id=session.id,
+            airline=scraped_result.airline,
+            departure_date=scraped_result.departure_date,
+            departure_time='08:00',  # Placeholder - scrapers should provide this
+            arrival_time='12:00',    # Placeholder
+            cabin_class=scraped_result.cabin_class,
+            miles_cost=scraped_result.miles_cost,
+            available_seats=scraped_result.available_seats,
+            external_id=str(uuid.uuid4()),
+        )
+        db.add(result)
+        results.append(result)
 
     db.commit()
     for result in results:

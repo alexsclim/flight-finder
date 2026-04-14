@@ -1,6 +1,6 @@
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
-from ..auth import get_current_user_optional
+from ..auth import get_current_user_optional, get_current_user
 from ..database import get_db
 from ..schemas import SearchRequest, SearchSessionResponse, SearchHistoryItem
 from ..services import create_search_session, get_search_results, get_user_search_history
@@ -8,7 +8,7 @@ from ..services import create_search_session, get_search_results, get_user_searc
 router = APIRouter()
 
 
-@router.post('/', response_model=SearchSessionResponse)
+@router.post('/search', response_model=SearchSessionResponse)
 def perform_search(
     payload: SearchRequest,
     db: Session = Depends(get_db),
@@ -50,7 +50,7 @@ def perform_search(
     }
 
 
-@router.get('/history/user', response_model=list[SearchHistoryItem])
+@router.get('/search/history/user', response_model=list[SearchHistoryItem])
 def user_search_history(
     db: Session = Depends(get_db),
     current_user=Depends(get_current_user),
@@ -72,7 +72,7 @@ def user_search_history(
     ]
 
 
-@router.get('/{search_session_id}', response_model=SearchSessionResponse)
+@router.get('/search/{search_session_id}', response_model=SearchSessionResponse)
 def get_session_result(search_session_id: str, db: Session = Depends(get_db)):
     result = get_search_results(db, search_session_id)
     if result is None:

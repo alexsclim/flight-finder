@@ -15,9 +15,9 @@ app.add_middleware(
     allow_headers=['*'],
 )
 
-app.include_router(auth.router, prefix='/api/auth')
-app.include_router(search.router, prefix='/api/search')
-app.include_router(alerts.router, prefix='/api/alerts')
+app.include_router(auth, prefix='/api')
+app.include_router(search, prefix='/api')
+app.include_router(alerts, prefix='/api')
 
 
 @app.on_event('startup')
